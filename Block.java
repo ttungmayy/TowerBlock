@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import javafx.animation.PathTransition;
-import javafx.scene.shape.Path;
 import java.nio.file.Paths;
 import javafx.animation.AnimationTimer;
+import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -15,8 +15,11 @@ import javafx.util.Duration;
 
 public class Block extends Pane {
 
-    int blockX = 0;
+    int blockX = 100;
+    int blockY = 200;
     int blockWidth = 50;
+    int radius = 150;
+    int angle = 0;
     int blockHeight = 50;
     int blockSpeed = 10;
     int totalBlock = 0;
@@ -25,10 +28,11 @@ public class Block extends Pane {
     Path path;
     InputStream block;
     ImageView imgBlock;
+    PathTransition pathTransition;
 
     public Block() {
         try {
-            block = Files.newInputStream(Paths.get("C:/Users/PM/Documents/NetBeansProjects/TowerBloxx/src/towerbloxx/box.png"));
+            block = Files.newInputStream(Paths.get("/Users/namedojimo/NetBeansProjects/Project/src/towerbloxx/box.png"));
             imgBlock = new ImageView(new Image(block));
             imgBlock.setFitWidth(blockWidth);
             imgBlock.setFitHeight(blockWidth);
@@ -43,17 +47,22 @@ public class Block extends Pane {
 
         AnimationTimer blockMovement = new AnimationTimer() {
             public void handle(long arg0) {
-                path = new Path();
-                MoveTo moveTo = new MoveTo(100, 0);
-                CubicCurveTo cubicCurveTo = new CubicCurveTo(100, 0, 200, 250, 500, 0);
-                path.getElements().add(moveTo);
-                path.getElements().add(cubicCurveTo);
-                PathTransition pathTransition = new PathTransition();
-                pathTransition.setDuration(Duration.millis(2000));
-                pathTransition.setNode(imgBlock);
-                pathTransition.setPath(path);
-                pathTransition.setCycleCount(50);
-                pathTransition.setAutoReverse(true);
+
+                if (angle < 50)
+                {
+                    angle++;
+                    blockX += blockSpeed + (ovalCenterX + Math.sin(Math.toRadians(angle)) * radius);
+                    blockY += blockSpeed  + (ovalCenterY + Math.cos(Math.toRadians(angle)) * radius);
+                }
+                
+                else
+                {
+                    angle++;
+                    blockX += blockSpeed + (ovalCenterX + Math.cos(Math.toRadians(angle)) * radius);
+                    blockY += blockSpeed  + (ovalCenterY + Math.sin(Math.toRadians(angle)) * radius);
+               
+                }
+
             }
         };
         blockMovement.start();
