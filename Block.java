@@ -68,7 +68,6 @@ public class Block extends Pane{
         Block newBlock = new Block();
         newBlock.blockX = 0;
         isDetach = false;
-        System.out.println("Eiei");
         return newBlock;
     }
 }
